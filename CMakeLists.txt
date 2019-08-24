@@ -272,7 +272,7 @@ find_program(AWK NAMES gawk awk)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-if(NOT AWK OR ANDROID)
+if(NOT AWK OR ANDROID OR IOS)
   # No awk available to generate sources; use pre-built pnglibconf.h
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/pnglibconf.h.prebuilt
                  ${CMAKE_CURRENT_BINARY_DIR}/pnglibconf.h)
@@ -482,7 +482,7 @@ set(libpng_private_hdrs
   pnginfo.h
   pngstruct.h
 )
-if(AWK AND NOT ANDROID)
+if(AWK AND NOT ANDROID AND NOT IOS)
   list(APPEND libpng_private_hdrs "${CMAKE_CURRENT_BINARY_DIR}/pngprefix.h")
 endif()
 set(libpng_sources
