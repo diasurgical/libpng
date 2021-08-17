@@ -836,19 +836,13 @@ function(create_symlink DEST_FILE)
     # For simplicity, make the symlink a POST_BUILD step, and use the TARGET
     # signature of add_custom_command.
     if(CMAKE_HOST_WIN32 AND NOT CYGWIN)
-      add_custom_command(TARGET ${S_TARGET}
-                         POST_BUILD
-                         COMMAND "${CMAKE_COMMAND}"
-                                 -E copy_if_different
-                                 $<TARGET_LINKER_FILE_NAME:${S_TARGET}>
-                                 $<TARGET_LINKER_FILE_DIR:${S_TARGET}>/${DEST_FILE})
+      add_custom_command(TARGET ${S_TARGET} POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different $<TARGET_LINKER_FILE:${S_TARGET}> ${DEST_FILE}
+        WORKING_DIRECTORY $<TARGET_LINKER_FILE_DIR:${S_TARGET}>)
     else()
-      add_custom_command(TARGET ${S_TARGET}
-                         POST_BUILD
-                         COMMAND "${CMAKE_COMMAND}"
-                                 -E create_symlink
-                                 $<TARGET_LINKER_FILE_NAME:${S_TARGET}>
-                                 $<TARGET_LINKER_FILE_DIR:${S_TARGET}>/${DEST_FILE})
+      add_custom_command(TARGET ${S_TARGET} POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E create_symlink $<TARGET_LINKER_FILE_NAME:${S_TARGET}> ${DEST_FILE}
+        WORKING_DIRECTORY $<TARGET_LINKER_FILE_DIR:${S_TARGET}>)
     endif()
   endif()
 endfunction()
